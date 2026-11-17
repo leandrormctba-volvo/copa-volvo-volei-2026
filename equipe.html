@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fotos da equipe – Copa Volvo de Vôlei 2026</title>
-  <script src="inicio.js?v=8"></script>
+  <script src="inicio.js?v=9"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body class="claro">
   <header class="fundo-volei">
@@ -17,7 +17,7 @@
       <h1 id="titulo">Equipe</h1>
     </div>
     <div class="sub">Copa Volvo de Vôlei Masculino 2026</div>
-    <a href="equipes.html">← Voltar para as equipes</a>
+    <a href="equipes.html" id="voltar">← Voltar para as equipes</a>
   </header>
 
   <main>
@@ -36,21 +36,44 @@
 
   <footer>Copa Volvo de Vôlei Masculino 2026</footer>
 
-  <script src="bola.js?v=8"></script>
-  <script src="equipes.js?v=8"></script>
-  <script src="fotos.js?v=8"></script>
+  <script src="bola.js?v=9"></script>
+  <script src="equipes.js?v=9"></script>
+  <script src="fotos.js?v=9"></script>
   <script>
-    const miniatura = id => "https://drive.google.com/thumbnail?id=" + id + "&sz=w600";
-    const grande    = id => "https://drive.google.com/thumbnail?id=" + id + "&sz=w2000";
+    // Endereço de imagens do Google que aguenta muitas fotos de uma vez
+    // (o "drive.google.com/thumbnail" bloqueia depois das primeiras fotos)
+    const celular   = matchMedia("(max-width: 600px)").matches;
+    const miniatura = id => "https://lh3.googleusercontent.com/d/" + id + "=w" + (celular ? 320 : 480);
+    const grande    = id => "https://lh3.googleusercontent.com/d/" + id + "=w" + (celular ? 1200 : 2000);
+    const reserva   = id => "https://drive.google.com/thumbnail?id=" + id + "&sz=w400";
     const download  = id => "https://drive.google.com/uc?export=download&id=" + id;
 
-    const pasta = new URLSearchParams(location.search).get("equipe");
+    const params = new URLSearchParams(location.search);
+    const pasta = params.get("equipe");
     const equipe = EQUIPES.find(e => e.pasta === pasta);
     const aviso = document.getElementById("aviso");
     const areaJogos = document.getElementById("jogos");
+    const voltar = document.getElementById("voltar");
 
-    let todas = [];   // todas as fotos da página, para navegar na foto ampliada
+    let todas = [];   // fotos do jogo aberto, para navegar na foto ampliada
     let atual = 0;
+
+    // Se a foto falhar, tenta de novo (até 3 vezes) e depois usa o endereço reserva
+    function carregarFoto(img, id) {
+      let tentativas = 0;
+      img.onerror = () => {
+        tentativas++;
+        if (tentativas <= 3) setTimeout(() => { img.src = miniatura(id) + "?t=" + tentativas; }, 800 * tentativas);
+        else if (tentativas === 4) img.src = reserva(id);
+      };
+      img.src = miniatura(id);
+    }
+
+    function nomeDoJogo(jogo) {
+      // Nomes oficiais das duas equipes (ex.: "GS x AVALANCHE")
+      const times = EQUIPES.filter(e => jogoDaEquipe(jogo.nome, e)).map(e => e.nome);
+      return times.length === 2 ? times.join(" x ") : jogo.nome.replace(/^jogo \d+\s*/i, "");
+    }
 
     if (!equipe) {
       document.getElementById("titulo").textContent = "Equipe não encontrada";
@@ -60,38 +83,62 @@
       document.getElementById("titulo").textContent = equipe.nome;
       document.title = equipe.nome + " – Copa Volvo de Vôlei 2026";
 
-      const jogos = JOGOS.filter(j => jogoDaEquipe(j.nome, equipe) && j.fotos.length);
+      const jogos = JOGOS.map((j, n) => ({ ...j, n }))
+                         .filter(j => jogoDaEquipe(j.nome, equipe) && j.fotos.length);
+      const escolhido = jogos.find(j => String(j.n) === params.get("jogo"));
+
       if (jogos.length === 0) {
         aviso.textContent = "📷 As fotos desta equipe serão publicadas em breve.";
         aviso.hidden = false;
-      }
+      } else if (!escolhido) {
+        // ETAPA 1: lista dos jogos da equipe
+        const titulo = document.createElement("h2");
+        titulo.textContent = "Escolha um jogo";
+        const lista = document.createElement("div");
+        lista.className = "lista-jogos";
+        jogos.forEach(jogo => {
+          const card = document.createElement("a");
+          card.className = "card-jogo";
+          card.href = "equipe.html?equipe=" + encodeURIComponent(equipe.pasta) + "&jogo=" + jogo.n;
+          const capa = document.createElement("img");
+          capa.alt = "";
+          carregarFoto(capa, jogo.fotos[0]);
+          const texto = document.createElement("span");
+          texto.className = "card-jogo-texto";
+          texto.innerHTML = "<strong></strong><small></small>";
+          texto.querySelector("strong").textContent = nomeDoJogo(jogo);
+          texto.querySelector("small").textContent = jogo.fotos.length + " fotos  ›";
+          card.append(capa, texto);
+          lista.appendChild(card);
+        });
+        areaJogos.append(titulo, lista);
+      } else {
+        // ETAPA 2: fotos do jogo escolhido
+        voltar.href = "equipe.html?equipe=" + encodeURIComponent(equipe.pasta);
+        voltar.textContent = "← Voltar para os jogos da " + equipe.nome;
+        document.title = nomeDoJogo(escolhido) + " – Copa Volvo de Vôlei 2026";
 
-      jogos.forEach(jogo => {
         const secao = document.createElement("section");
         secao.className = "jogo";
-        // Título com os nomes oficiais das duas equipes (ex.: "GS x AVALANCHE")
-        const times = EQUIPES.filter(e => jogoDaEquipe(jogo.nome, e)).map(e => e.nome);
         const titulo = document.createElement("h2");
-        titulo.textContent = (times.length === 2 ? times.join(" x ") : jogo.nome.replace(/^jogo \d+\s*/i, "")) + " ";
+        titulo.textContent = nomeDoJogo(escolhido) + " ";
         const qtd = document.createElement("small");
-        qtd.textContent = "· " + jogo.fotos.length + " fotos";
+        qtd.textContent = "· " + escolhido.fotos.length + " fotos";
         titulo.appendChild(qtd);
         secao.appendChild(titulo);
 
         const galeria = document.createElement("div");
         galeria.className = "galeria";
-        jogo.fotos.forEach(id => {
-          const indice = todas.length;
+        escolhido.fotos.forEach((id, indice) => {
           todas.push(id);
-
           const card = document.createElement("div");
           card.className = "foto";
 
           const img = document.createElement("img");
-          img.src = miniatura(id);
           img.loading = "lazy";
-          img.alt = jogo.nome + " – foto " + (indice + 1);
+          img.alt = nomeDoJogo(escolhido) + " – foto " + (indice + 1);
           img.onclick = () => abrir(indice);
+          carregarFoto(img, id);
 
           const botao = document.createElement("a");
           botao.className = "baixar";
@@ -105,7 +152,7 @@
         });
         secao.appendChild(galeria);
         areaJogos.appendChild(secao);
-      });
+      }
     }
 
     const ampliada = document.getElementById("ampliada");
@@ -129,6 +176,16 @@
       if (e.key === "Escape") fechar();
       if (e.key === "ArrowLeft") abrir(atual - 1);
       if (e.key === "ArrowRight") abrir(atual + 1);
+    });
+
+    // No celular: arrastar o dedo para o lado troca de foto na foto ampliada
+    let inicioX = null;
+    ampliada.addEventListener("touchstart", e => { inicioX = e.touches[0].clientX; }, { passive: true });
+    ampliada.addEventListener("touchend", e => {
+      if (inicioX === null) return;
+      const dx = e.changedTouches[0].clientX - inicioX;
+      inicioX = null;
+      if (Math.abs(dx) > 50) abrir(atual + (dx < 0 ? 1 : -1));
     });
   </script>
 </body>
