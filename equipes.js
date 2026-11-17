@@ -1,13 +1,17 @@
 // ============================================================
 // LISTA DAS EQUIPES
-// Para trocar os nomes, basta editar o texto entre aspas.
-// Para adicionar uma equipe, copie uma linha e mude o nome.
+// nome  = texto que aparece no botão
+// pasta = nome da pasta dentro de "fotos/" onde ficam as fotos
+//         daquela equipe (sem acento e sem espaço)
 // ============================================================
 const EQUIPES = [
-  "VOLVO",
-  "BOSCH",
-  "GS",
-  "CAMPO LARGO",
-  "AVALANCHE",
-  "TAMANDARÉ",
+  { nome: "VOLVO",       pasta: "volvo" },
+  { nome: "BOSCH",       pasta: "bosch" },
+  { nome: "GS",          pasta: "gs" },
+  { nome: "CAMPO LARGO", pasta: "campo-largo" },
+  { nome: "AVALANCHE",   pasta: "avalanche" },
+  { nome: "TAMANDARÉ",   pasta: "tamandare" },
 ];
+
+// Repositório no GitHub (usado para encontrar as fotos automaticamente)
+const REPOSITORIO = "leandrormctba-volvo/copa-volvo-volei-2026";

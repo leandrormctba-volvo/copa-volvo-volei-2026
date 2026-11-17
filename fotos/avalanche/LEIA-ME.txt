@@ -1,0 +1,1 @@
+﻿Coloque nesta pasta as fotos da equipe (.jpg, .jpeg, .png, .webp). Elas aparecem sozinhas no site depois do envio ao GitHub.

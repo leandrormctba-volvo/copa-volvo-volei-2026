@@ -109,6 +109,46 @@ main h2 { text-align: center; margin-bottom: 24px; }
   font-size: 18px;
 }
 
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.galeria img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #d8e0ea;
+  transition: transform .15s;
+}
+.galeria img:hover { transform: scale(1.03); }
+
+.ampliada {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.ampliada[hidden] { display: none; }
+.ampliada img { max-width: 90vw; max-height: 85vh; border-radius: 6px; }
+.ampliada button {
+  position: absolute;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 48px;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+.ampliada .fechar { top: 8px; right: 8px; font-size: 32px; }
+.ampliada .esq { left: 4px; }
+.ampliada .dir { right: 4px; }
+
 footer {
   text-align: center;
   padding: 16px;

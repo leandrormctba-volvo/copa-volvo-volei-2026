@@ -13,15 +13,90 @@
   </header>
 
   <main>
-    <div class="aviso">📷 As fotos desta equipe serão publicadas em breve.</div>
+    <div class="galeria" id="galeria"></div>
+    <div class="aviso" id="aviso">Carregando fotos...</div>
   </main>
+
+  <!-- Foto ampliada -->
+  <div class="ampliada" id="ampliada" hidden>
+    <button class="fechar" id="fechar" aria-label="Fechar">✕</button>
+    <button class="seta esq" id="anterior" aria-label="Foto anterior">‹</button>
+    <img id="foto-grande" alt="">
+    <button class="seta dir" id="proxima" aria-label="Próxima foto">›</button>
+  </div>
 
   <footer>Copa Volvo de Vôlei Masculino 2026</footer>
 
+  <script src="equipes.js"></script>
   <script>
-    const nome = new URLSearchParams(location.search).get("nome") || "Equipe";
-    document.getElementById("titulo").textContent = "🏐 " + nome;
-    document.title = nome + " – Copa Volvo de Vôlei 2026";
+    const pasta = new URLSearchParams(location.search).get("equipe");
+    const equipe = EQUIPES.find(e => e.pasta === pasta);
+    const aviso = document.getElementById("aviso");
+    const galeria = document.getElementById("galeria");
+
+    if (!equipe) {
+      document.getElementById("titulo").textContent = "Equipe não encontrada";
+      aviso.textContent = "Volte e escolha uma equipe.";
+    } else {
+      document.getElementById("titulo").textContent = "🏐 " + equipe.nome;
+      document.title = equipe.nome + " – Copa Volvo de Vôlei 2026";
+      carregarFotos();
+    }
+
+    let fotos = [];
+    let atual = 0;
+
+    async function carregarFotos() {
+      try {
+        const url = "https://api.github.com/repos/" + REPOSITORIO + "/contents/fotos/" + equipe.pasta;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(resp.status);
+        const arquivos = await resp.json();
+        fotos = arquivos
+          .filter(a => /\.(jpe?g|png|webp|gif)$/i.test(a.name))
+          .sort((a, b) => a.name.localeCompare(b.name, "pt-BR", { numeric: true }))
+          .map(a => "fotos/" + equipe.pasta + "/" + encodeURIComponent(a.name));
+      } catch (e) {
+        aviso.textContent = "Não foi possível carregar as fotos agora. Tente novamente em alguns minutos.";
+        return;
+      }
+
+      if (fotos.length === 0) {
+        aviso.textContent = "📷 As fotos desta equipe serão publicadas em breve.";
+        return;
+      }
+
+      aviso.hidden = true;
+      fotos.forEach((src, i) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.loading = "lazy";
+        img.alt = equipe.nome + " – foto " + (i + 1);
+        img.onclick = () => abrir(i);
+        galeria.appendChild(img);
+      });
+    }
+
+    const ampliada = document.getElementById("ampliada");
+    const fotoGrande = document.getElementById("foto-grande");
+
+    function abrir(i) {
+      atual = (i + fotos.length) % fotos.length;
+      fotoGrande.src = fotos[atual];
+      ampliada.hidden = false;
+    }
+    function fechar() { ampliada.hidden = true; }
+
+    document.getElementById("fechar").onclick = fechar;
+    document.getElementById("anterior").onclick = e => { e.stopPropagation(); abrir(atual - 1); };
+    document.getElementById("proxima").onclick = e => { e.stopPropagation(); abrir(atual + 1); };
+    ampliada.onclick = e => { if (e.target === ampliada) fechar(); };
+    document.addEventListener("keydown", e => {
+      if (ampliada.hidden) return;
+      if (e.key === "Escape") fechar();
+      if (e.key === "ArrowLeft") abrir(atual - 1);
+      if (e.key === "ArrowRight") abrir(atual + 1);
+    });
   </script>
 </body>
 </html>

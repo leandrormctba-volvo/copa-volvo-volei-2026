@@ -22,10 +22,10 @@
   <script src="equipes.js"></script>
   <script>
     const lista = document.getElementById("lista-equipes");
-    EQUIPES.forEach(nome => {
+    EQUIPES.forEach(equipe => {
       const botao = document.createElement("a");
-      botao.href = "equipe.html?nome=" + encodeURIComponent(nome);
-      botao.textContent = nome;
+      botao.href = "equipe.html?equipe=" + encodeURIComponent(equipe.pasta);
+      botao.textContent = equipe.nome;
       lista.appendChild(botao);
     });
   </script>
