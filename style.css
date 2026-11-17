@@ -332,6 +332,38 @@ main > h2 { text-align: center; margin-bottom: 28px; font-weight: 700; color: va
   gap: 12px;
 }
 
+/* Lista de jogos da equipe (etapa antes das fotos) */
+.lista-jogos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+.card-jogo {
+  position: relative;
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--teal);
+  box-shadow: 0 4px 14px rgba(6, 49, 58, .25);
+  text-decoration: none;
+  color: var(--branco);
+  transition: transform .2s, box-shadow .2s;
+}
+.card-jogo:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(6, 49, 58, .35); }
+.card-jogo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-jogo-texto {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 40px 16px 14px;
+  background: linear-gradient(transparent, rgba(6, 49, 58, .92));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.card-jogo-texto strong { font-size: 22px; font-weight: 800; letter-spacing: .5px; }
+.card-jogo-texto small { font-size: 14px; opacity: .9; }
+
 .jogo { margin-bottom: 40px; }
 .jogo h2 { text-align: left; font-size: 20px; font-weight: 700; color: var(--teal); margin-bottom: 14px; border-left: 5px solid var(--teal-3); padding-left: 10px; }
 .jogo h2 small { font-weight: 400; color: var(--tinta-2); font-size: 15px; }
@@ -364,6 +396,15 @@ main > h2 { text-align: center; margin-bottom: 28px; font-weight: 700; color: va
   text-decoration: none;
 }
 .baixar:hover { background: var(--fundo-escuro); }
+
+/* Celular: fotos na metade do tamanho (2 por linha); tocar abre maior */
+@media (max-width: 600px) {
+  .galeria { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .foto .baixar { padding: 7px 4px; font-size: 13px; }
+  .lista-jogos { grid-template-columns: 1fr; gap: 14px; }
+  .card-jogo-texto strong { font-size: 19px; }
+  .ampliada img { max-width: 96vw; max-height: 78vh; }
+}
 
 .ampliada {
   position: fixed;
