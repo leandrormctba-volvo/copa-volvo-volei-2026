@@ -1,17 +1,27 @@
 // ============================================================
 // LISTA DAS EQUIPES
-// nome  = texto que aparece no botão
-// pasta = nome da pasta dentro de "fotos/" onde ficam as fotos
-//         daquela equipe (sem acento e sem espaço)
+// nome     = texto que aparece no botão
+// pasta    = identificador usado no endereço da página
+// palavras = palavras que aparecem no nome da pasta do jogo no
+//            Google Drive. Se o nome da pasta tiver uma dessas
+//            palavras, as fotos do jogo aparecem nesta equipe.
 // ============================================================
 const EQUIPES = [
-  { nome: "VOLVO",       pasta: "volvo" },
-  { nome: "BOSCH",       pasta: "bosch" },
-  { nome: "GS",          pasta: "gs" },
-  { nome: "CAMPO LARGO", pasta: "campo-largo" },
-  { nome: "AVALANCHE",   pasta: "avalanche" },
-  { nome: "TAMANDARÉ",   pasta: "tamandare" },
+  { nome: "VOLVO",       pasta: "volvo",       palavras: ["volvo"] },
+  { nome: "BOSCH",       pasta: "bosch",       palavras: ["bosch"] },
+  { nome: "GS",          pasta: "gs",          palavras: ["gs", "curitiba"] },
+  { nome: "CAMPO LARGO", pasta: "campo-largo", palavras: ["campo largo"] },
+  { nome: "AVALANCHE",   pasta: "avalanche",   palavras: ["avalanche"] },
+  { nome: "TAMANDARÉ",   pasta: "tamandare",   palavras: ["tamandare", "almirante"] },
 ];
 
-// Repositório no GitHub (usado para encontrar as fotos automaticamente)
-const REPOSITORIO = "leandrormctba-volvo/copa-volvo-volei-2026";
+// Deixa o texto sem acento e em minúsculas, para comparar nomes
+function simplificar(texto) {
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+// Diz se um jogo (nome da pasta no Drive) é da equipe
+function jogoDaEquipe(nomeJogo, equipe) {
+  const palavrasDoJogo = simplificar(nomeJogo);
+  return equipe.palavras.some(p => new RegExp("\\b" + simplificar(p) + "\\b").test(palavrasDoJogo));
+}

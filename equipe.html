@@ -13,8 +13,8 @@
   </header>
 
   <main>
-    <div class="galeria" id="galeria"></div>
-    <div class="aviso" id="aviso">Carregando fotos...</div>
+    <div id="jogos"></div>
+    <div class="aviso" id="aviso" hidden></div>
   </main>
 
   <!-- Foto ampliada -->
@@ -23,69 +23,87 @@
     <button class="seta esq" id="anterior" aria-label="Foto anterior">‹</button>
     <img id="foto-grande" alt="">
     <button class="seta dir" id="proxima" aria-label="Próxima foto">›</button>
+    <a class="baixar baixar-grande" id="baixar-grande" href="#" target="_blank" rel="noopener">⬇ Baixar foto</a>
   </div>
 
   <footer>Copa Volvo de Vôlei Masculino 2026</footer>
 
   <script src="equipes.js"></script>
+  <script src="fotos.js"></script>
   <script>
+    const miniatura = id => "https://drive.google.com/thumbnail?id=" + id + "&sz=w600";
+    const grande    = id => "https://drive.google.com/thumbnail?id=" + id + "&sz=w2000";
+    const download  = id => "https://drive.google.com/uc?export=download&id=" + id;
+
     const pasta = new URLSearchParams(location.search).get("equipe");
     const equipe = EQUIPES.find(e => e.pasta === pasta);
     const aviso = document.getElementById("aviso");
-    const galeria = document.getElementById("galeria");
+    const areaJogos = document.getElementById("jogos");
+
+    let todas = [];   // todas as fotos da página, para navegar na foto ampliada
+    let atual = 0;
 
     if (!equipe) {
       document.getElementById("titulo").textContent = "Equipe não encontrada";
       aviso.textContent = "Volte e escolha uma equipe.";
+      aviso.hidden = false;
     } else {
       document.getElementById("titulo").textContent = "🏐 " + equipe.nome;
       document.title = equipe.nome + " – Copa Volvo de Vôlei 2026";
-      carregarFotos();
-    }
 
-    let fotos = [];
-    let atual = 0;
-
-    async function carregarFotos() {
-      try {
-        const url = "https://api.github.com/repos/" + REPOSITORIO + "/contents/fotos/" + equipe.pasta;
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(resp.status);
-        const arquivos = await resp.json();
-        fotos = arquivos
-          .filter(a => /\.(jpe?g|png|webp|gif)$/i.test(a.name))
-          .sort((a, b) => a.name.localeCompare(b.name, "pt-BR", { numeric: true }))
-          .map(a => "fotos/" + equipe.pasta + "/" + encodeURIComponent(a.name));
-      } catch (e) {
-        aviso.textContent = "Não foi possível carregar as fotos agora. Tente novamente em alguns minutos.";
-        return;
-      }
-
-      if (fotos.length === 0) {
+      const jogos = JOGOS.filter(j => jogoDaEquipe(j.nome, equipe) && j.fotos.length);
+      if (jogos.length === 0) {
         aviso.textContent = "📷 As fotos desta equipe serão publicadas em breve.";
-        return;
+        aviso.hidden = false;
       }
 
-      aviso.hidden = true;
-      fotos.forEach((src, i) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.loading = "lazy";
-        img.alt = equipe.nome + " – foto " + (i + 1);
-        img.onclick = () => abrir(i);
-        galeria.appendChild(img);
+      jogos.forEach(jogo => {
+        const secao = document.createElement("section");
+        secao.className = "jogo";
+        secao.innerHTML = "<h2></h2>";
+        secao.querySelector("h2").textContent = jogo.nome.replace(/^jogo \d+\s*/i, "") + " · " + jogo.fotos.length + " fotos";
+
+        const galeria = document.createElement("div");
+        galeria.className = "galeria";
+        jogo.fotos.forEach(id => {
+          const indice = todas.length;
+          todas.push(id);
+
+          const card = document.createElement("div");
+          card.className = "foto";
+
+          const img = document.createElement("img");
+          img.src = miniatura(id);
+          img.loading = "lazy";
+          img.alt = jogo.nome + " – foto " + (indice + 1);
+          img.onclick = () => abrir(indice);
+
+          const botao = document.createElement("a");
+          botao.className = "baixar";
+          botao.href = download(id);
+          botao.target = "_blank";
+          botao.rel = "noopener";
+          botao.textContent = "⬇ Baixar";
+
+          card.append(img, botao);
+          galeria.appendChild(card);
+        });
+        secao.appendChild(galeria);
+        areaJogos.appendChild(secao);
       });
     }
 
     const ampliada = document.getElementById("ampliada");
     const fotoGrande = document.getElementById("foto-grande");
+    const baixarGrande = document.getElementById("baixar-grande");
 
     function abrir(i) {
-      atual = (i + fotos.length) % fotos.length;
-      fotoGrande.src = fotos[atual];
+      atual = (i + todas.length) % todas.length;
+      fotoGrande.src = grande(todas[atual]);
+      baixarGrande.href = download(todas[atual]);
       ampliada.hidden = false;
     }
-    function fechar() { ampliada.hidden = true; }
+    function fechar() { ampliada.hidden = true; fotoGrande.src = ""; }
 
     document.getElementById("fechar").onclick = fechar;
     document.getElementById("anterior").onclick = e => { e.stopPropagation(); abrir(atual - 1); };
