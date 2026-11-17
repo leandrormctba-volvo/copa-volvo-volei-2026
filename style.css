@@ -87,11 +87,21 @@ body {
 .bola-foto {
   display: block;
   border-radius: 50%;
-  /* Foto: "Wedstrijdbal EGLF4 1.jpg" – TOPCyber – Wikimedia Commons – CC BY-SA 4.0 (recortada em círculo) */
-  background: url("https://commons.wikimedia.org/wiki/Special:FilePath/Wedstrijdbal_EGLF4_1.jpg?width=900") 48.2% 56.9% / 183.2% auto no-repeat;
-  background-color: #f1c21b;
+  /* Foto: "Wedstrijdbal EGLF4 1.jpg" – TOPCyber – Wikimedia Commons – CC BY-SA 4.0
+     recortada em círculo e recolorida (neon + branco) pelo bola.js */
+  background: var(--bola-img) center / cover no-repeat;
+  background-color: #f6fafb;
   box-shadow: inset -10px -14px 26px rgba(0,0,0,.28), inset 8px 10px 20px rgba(255,255,255,.18);
+  opacity: 0;
+  transition: opacity .4s;
 }
+.bola-pronta .bola-foto { opacity: 1; }
+/* se o navegador não deixar recolorir, mostra a foto original */
+.bola-original .bola-foto {
+  background: url("https://commons.wikimedia.org/wiki/Special:FilePath/Wedstrijdbal_EGLF4_1.jpg?width=900") 48.2% 56.9% / 183.2% auto no-repeat;
+}
+/* brilho neon em volta da bola grande */
+.bola-anim .bola-foto { box-shadow: inset -10px -14px 26px rgba(0,0,0,.28), 0 0 34px rgba(120,228,245,.35); }
 
 .bola-anim {
   width: 150px;
