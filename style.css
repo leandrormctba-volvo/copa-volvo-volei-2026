@@ -197,6 +197,8 @@ body {
   z-index: 5;
 }
 body.claro .marca-dagua { opacity: .16; }
+/* na página inicial o logo fica no fim da página (não cobre o botão) */
+body.fundo-volei > .marca-dagua { position: absolute; z-index: 1; }
 
 /* ---------- Cabeçalho das páginas internas ---------- */
 header {
@@ -224,7 +226,7 @@ main > h2 { text-align: center; margin-bottom: 28px; font-weight: 700; color: va
   grid-template-columns: repeat(3, 1fr);
   gap: 22px;
 }
-@media (max-width: 860px) { .equipes { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 680px) { .equipes { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .equipes { grid-template-columns: 1fr; } }
 
 .card-equipe {
@@ -264,9 +266,9 @@ main > h2 { text-align: center; margin-bottom: 28px; font-weight: 700; color: va
 }
 .card-equipe .jogador {
   position: absolute;
-  inset: 8px 0 34px;
+  inset: 6px 0 38px;
   margin: auto;
-  height: calc(100% - 42px);
+  height: calc(100% - 44px);
   opacity: 0;
   transform: translateY(30px) scale(.9);
   transition: opacity .3s, transform .3s;
@@ -274,28 +276,28 @@ main > h2 { text-align: center; margin-bottom: 28px; font-weight: 700; color: va
 }
 .card-equipe .jogador .braco {
   transform-box: view-box;
-  transform-origin: 61px 34px;
-  transform: rotate(-35deg);
+  transform-origin: 58px 36px;
+  transform: rotate(-20deg);
 }
 .card-equipe .jogador .bola-mini {
   transform-box: view-box;
-  transform-origin: 82px 10px;
+  transform-origin: 88px 12px;
 }
 
 /* passar o mouse: vira silhueta do jogador pronto para atacar */
 .card-equipe:hover, .card-equipe.atacando { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(6,49,58,.32); }
 .card-equipe:hover::before, .card-equipe.atacando::before { opacity: 1; }
 .card-equipe:hover .jogador, .card-equipe.atacando .jogador { opacity: 1; transform: translateY(0) scale(1); }
-.card-equipe:hover .nome, .card-equipe.atacando .nome { transform: translateY(58px); font-size: 18px; }
+.card-equipe:hover .nome, .card-equipe.atacando .nome { transform: translateY(64px); font-size: 17px; }
 .card-equipe:hover .jogador .braco { animation: preparar .9s ease-in-out infinite alternate; }
 
-@keyframes preparar { from { transform: rotate(-35deg); } to { transform: rotate(-55deg); } }
+@keyframes preparar { from { transform: rotate(-20deg); } to { transform: rotate(-45deg); } }
 
 /* clicar: o jogador ataca a bola */
 .card-equipe.atacando .jogador .braco { animation: cortada .28s cubic-bezier(.6,0,.4,1) forwards; }
 .card-equipe.atacando .jogador .bola-mini { animation: bola-cortada .45s .16s cubic-bezier(.4,0,1,1) forwards; }
 .card-equipe.atacando { animation: impacto .45s .2s ease-out; }
-@keyframes cortada { from { transform: rotate(-55deg); } to { transform: rotate(95deg); } }
+@keyframes cortada { from { transform: rotate(-45deg); } to { transform: rotate(110deg); } }
 @keyframes bola-cortada {
   0%   { transform: translate(0, 0) scale(1); opacity: 1; }
   100% { transform: translate(40px, 120px) scale(1.6); opacity: 0; }

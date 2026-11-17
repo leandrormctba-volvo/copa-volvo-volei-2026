@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Equipes – Copa Volvo de Vôlei 2026</title>
-  <script src="inicio.js?v=4"></script>
+  <script src="inicio.js?v=5"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body class="claro">
   <header class="fundo-volei">
@@ -27,23 +27,27 @@
 
   <footer>Copa Volvo de Vôlei Masculino 2026</footer>
 
-  <script src="bola.js?v=4"></script>
-  <script src="equipes.js?v=4"></script>
+  <script src="bola.js?v=5"></script>
+  <script src="equipes.js?v=5"></script>
   <script>
     // Silhueta de um jogador saltando para atacar a bola
     const JOGADOR_SVG = `
-      <svg class="jogador" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M58 36 L62 64" stroke-width="12"/>
-          <path d="M57 37 L42 24" stroke-width="6"/>
-          <path d="M62 64 L50 79 L58 96" stroke-width="7"/>
-          <path d="M61 64 L72 78 L68 94" stroke-width="7"/>
-          <g class="braco"><path d="M61 34 L61 8" stroke-width="6"/></g>
+      <svg class="jogador" viewBox="0 0 120 108" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g fill="#fff" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+          <!-- tronco arqueado para trás -->
+          <path d="M46 34 Q40 52 49 70 L63 70 Q60 51 61 34 Z" stroke-width="3"/>
+          <!-- braço de apoio apontando para a bola -->
+          <path d="M51 38 L66 29 L80 22" fill="none" stroke-width="7"/>
+          <!-- pernas dobradas (salto) -->
+          <path d="M60 68 L69 86 L57 101" fill="none" stroke-width="9"/>
+          <path d="M53 68 L51 88 L37 97" fill="none" stroke-width="9"/>
+          <!-- braço de ataque (gira na cortada) -->
+          <g class="braco"><path d="M58 36 L65 18 L58 5" fill="none" stroke-width="8"/></g>
         </g>
-        <circle cx="56" cy="22" r="8" fill="#fff"/>
+        <circle cx="51" cy="23" r="9" fill="#fff"/>
         <g class="bola-mini">
-          <circle cx="82" cy="10" r="7" fill="#f1c21b" stroke="#1d4fa0" stroke-width="2.5"/>
-          <path d="M76 8 Q82 14 88 8" fill="none" stroke="#1d4fa0" stroke-width="2"/>
+          <circle cx="88" cy="12" r="8" fill="#f1c21b" stroke="#1d4fa0" stroke-width="2.5"/>
+          <path d="M81 9 Q88 17 95 9 M88 4 Q84 12 88 20" fill="none" stroke="#1d4fa0" stroke-width="2"/>
         </g>
       </svg>`;
 
