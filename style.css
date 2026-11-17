@@ -98,7 +98,7 @@ body {
 .bola-pronta .bola-foto { opacity: 1; }
 /* se o navegador não deixar recolorir, mostra a foto original */
 .bola-original .bola-foto {
-  background: url("https://commons.wikimedia.org/wiki/Special:FilePath/Wedstrijdbal_EGLF4_1.jpg?width=900") 48.2% 56.9% / 183.2% auto no-repeat;
+  background: url("https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Wedstrijdbal_EGLF4_1.jpg/960px-Wedstrijdbal_EGLF4_1.jpg") 48.2% 56.9% / 183.2% auto no-repeat;
 }
 /* brilho neon em volta da bola grande */
 .bola-anim .bola-foto { box-shadow: inset -10px -14px 26px rgba(0,0,0,.28), 0 0 34px rgba(120,228,245,.35); }

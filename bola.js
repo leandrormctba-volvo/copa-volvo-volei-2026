@@ -7,11 +7,11 @@
 //  3) logo da Associação Volvo como marca d'água
 
 // Foto: "Wedstrijdbal EGLF4 1.jpg" – TOPCyber – Wikimedia Commons – CC BY-SA 4.0
-const BOLA_FOTO = "https://commons.wikimedia.org/wiki/Special:FilePath/Wedstrijdbal_EGLF4_1.jpg?width=900";
+const BOLA_FOTO = "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Wedstrijdbal_EGLF4_1.jpg/960px-Wedstrijdbal_EGLF4_1.jpg";
 const COR_NEON  = [120, 228, 245];   // mesmo tom neon do "2026"
 const COR_CLARA = [246, 250, 251];   // branco gelo
 const COR_TEXTO = "#0c5868";         // verde-petróleo da Associação Volvo
-const CHAVE_CACHE = "bola-neon-v2";
+const CHAVE_CACHE = "bola-neon-v3";
 
 document.querySelectorAll("[data-bola]").forEach(el => {
   el.innerHTML = '<span class="bola-foto" style="width:100%;height:100%"></span>';
