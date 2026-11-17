@@ -1,0 +1,117 @@
+:root {
+  --azul: #0b2a4a;
+  --azul-claro: #1f5fa8;
+  --amarelo: #f5c400;
+  --branco: #ffffff;
+  --cinza: #eef2f7;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--cinza);
+  color: var(--azul);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Página inicial ---------- */
+.capa {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 16px;
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+  color: var(--branco);
+}
+
+.capa .bola { font-size: 72px; margin-bottom: 16px; }
+
+.capa h1 {
+  font-size: clamp(32px, 7vw, 64px);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.capa h1 span { color: var(--amarelo); }
+
+.capa p {
+  margin-top: 12px;
+  font-size: clamp(16px, 3vw, 22px);
+  opacity: 0.9;
+}
+
+.botao-principal {
+  margin-top: 36px;
+  display: inline-block;
+  padding: 16px 40px;
+  background: var(--amarelo);
+  color: var(--azul);
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 40px;
+  text-decoration: none;
+  transition: transform .15s, box-shadow .15s;
+}
+.botao-principal:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+
+/* ---------- Cabeçalho das páginas internas ---------- */
+header {
+  background: var(--azul);
+  color: var(--branco);
+  padding: 20px 16px;
+  text-align: center;
+}
+header h1 { font-size: clamp(22px, 4vw, 32px); }
+header a { color: var(--amarelo); text-decoration: none; font-size: 14px; }
+
+main { flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; padding: 32px 16px; }
+
+main h2 { text-align: center; margin-bottom: 24px; }
+
+/* ---------- Botões das equipes ---------- */
+.equipes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.equipes a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  padding: 16px;
+  background: var(--branco);
+  border: 3px solid var(--azul-claro);
+  border-radius: 14px;
+  color: var(--azul);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background .15s, color .15s, transform .15s;
+}
+.equipes a:hover { background: var(--azul-claro); color: var(--branco); transform: translateY(-3px); }
+
+/* ---------- Galeria ---------- */
+.aviso {
+  text-align: center;
+  padding: 48px 16px;
+  background: var(--branco);
+  border-radius: 14px;
+  font-size: 18px;
+}
+
+footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 13px;
+  color: #6b7a8c;
+}

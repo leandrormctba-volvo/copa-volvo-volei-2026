@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fotos da equipe – Copa Volvo de Vôlei 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 id="titulo">Equipe</h1>
+    <a href="equipes.html">← Voltar para as equipes</a>
+  </header>
+
+  <main>
+    <div class="aviso">📷 As fotos desta equipe serão publicadas em breve.</div>
+  </main>
+
+  <footer>Copa Volvo de Vôlei Masculino 2026</footer>
+
+  <script>
+    const nome = new URLSearchParams(location.search).get("nome") || "Equipe";
+    document.getElementById("titulo").textContent = "🏐 " + nome;
+    document.title = nome + " – Copa Volvo de Vôlei 2026";
+  </script>
+</body>
+</html>
